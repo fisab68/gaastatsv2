@@ -90,11 +90,11 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
 .sb-clk.paused{color:var(--amber);}
 .sb-sta{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);}
 
-.le-bar{flex-shrink:0;background:var(--bg);border-bottom:1px solid var(--border);padding:4px 12px 3px;display:flex;align-items:center;gap:8px;min-height:30px;}
-.le-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;opacity:0;transition:opacity .3s;}
+.le-bar{flex-shrink:0;background:var(--bg);border-bottom:1px solid var(--border);padding:6px 12px 5px;display:flex;align-items:center;gap:10px;min-height:42px;}
+.le-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;opacity:0;transition:opacity .3s;}
 .le-dot.show{opacity:1;}
-.le-txt{font-size:15px;font-weight:800;color:var(--text);flex:1;}
-.le-prev{font-size:10px;color:var(--text-dim);opacity:.65;}
+.le-txt{font-size:20px;font-weight:800;color:var(--text);flex:1;}
+.le-prev{font-size:11px;color:var(--text-dim);opacity:.65;}
 
 .toggle-bar{padding:6px 10px;flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--border);}
 .toggle-btn{display:grid;grid-template-columns:1fr 1fr 1fr;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;overflow:hidden;}
@@ -111,8 +111,8 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
 
 .btn{border-radius:10px;border:1.5px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;padding:3px 4px;-webkit-tap-highlight-color:transparent;transition:opacity .08s;}
 .btn:active{opacity:.45;}
-.btn .n{font-family:var(--font-display);font-size:30px;font-weight:900;line-height:1;}
-.btn .l{font-size:8px;font-weight:700;text-align:center;line-height:1.3;letter-spacing:.3px;text-transform:uppercase;}
+.btn .n{font-family:var(--font-display);font-size:36px;font-weight:900;line-height:1;}
+.btn .l{font-size:9px;font-weight:700;text-align:center;line-height:1.3;letter-spacing:.3px;text-transform:uppercase;}
 
 .cg {background:linear-gradient(145deg,#0d2010,#0a1a0d);border-color:#1a4020;} .cg  .n{color:#00e676;} .cg  .l{color:#2a6040;}
 .cam{background:linear-gradient(145deg,#1a1500,#131000);border-color:#3a3000;} .cam .n{color:#ffe082;} .cam .l{color:#7a6020;}
@@ -273,23 +273,23 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
     <!-- Screen 1: Scores -->
     <div class="scr vis" id="scr1">
       <div class="sec">Our shots</div>
-      <div class="grid2" style="flex:2;min-height:0;">
+      <div class="grid2" style="flex:2.5;min-height:0;">
         <div class="btn cg"  data-kpi="Point – Play (Us)"  data-col="#00e676"><div class="n" id="ec-ppu">0</div><div class="l">Point play</div></div>
         <div class="btn cam" data-kpi="Miss – Play (Us)"   data-col="#ffe082"><div class="n" id="ec-mpu">0</div><div class="l">Miss play</div></div>
         <div class="btn cg"  data-kpi="Point – Free (Us)"  data-col="#00e676"><div class="n" id="ec-pfu">0</div><div class="l">Point free</div></div>
         <div class="btn cam" data-kpi="Miss – Free (Us)"   data-col="#ffe082"><div class="n" id="ec-mfu">0</div><div class="l">Miss free</div></div>
       </div>
-      <div class="goal-btn goal-us" data-kpi="Goal – Us" data-col="#00e676">
+      <div class="goal-btn goal-us" data-kpi="Goal – Us" data-col="#00e676" style="flex:1;min-height:0;">
         <div class="n" id="ec-gu">0</div><div class="l">Goal (Us)</div>
       </div>
       <div class="sec">Their shots</div>
-      <div class="grid2" style="flex:2;min-height:0;">
+      <div class="grid2" style="flex:2.5;min-height:0;">
         <div class="btn cr"  data-kpi="Point – Play (Them)" data-col="#ff3d5a"><div class="n" id="ec-ppt">0</div><div class="l">Point play</div></div>
         <div class="btn cam" data-kpi="Miss – Play (Them)"  data-col="#ffe082"><div class="n" id="ec-mpt">0</div><div class="l">Miss play</div></div>
         <div class="btn cr"  data-kpi="Point – Free (Them)" data-col="#ff3d5a"><div class="n" id="ec-pft">0</div><div class="l">Point free</div></div>
         <div class="btn cam" data-kpi="Miss – Free (Them)"  data-col="#ffe082"><div class="n" id="ec-mft">0</div><div class="l">Miss free</div></div>
       </div>
-      <div class="goal-btn goal-them" data-kpi="Goal – Them" data-col="#ff3d5a">
+      <div class="goal-btn goal-them" data-kpi="Goal – Them" data-col="#ff3d5a" style="flex:1;min-height:0;">
         <div class="n" id="ec-gt">0</div><div class="l">Goal (Them)</div>
       </div>
     </div>
@@ -297,7 +297,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
     <!-- Screen 2: Restarts -->
     <div class="scr" id="scr2">
       <div class="sec">Puck outs</div>
-      <div class="grid2" style="flex:1;min-height:0;">
+      <div class="grid2" style="flex:2;min-height:0;">
         <div class="btn cpu" data-kpi="Our PO – We Win"    data-col="#b388ff"><div class="n" id="ec-opw">0</div><div class="l">Our PO win</div></div>
         <div class="btn cr"  data-kpi="Our PO – We Lose"   data-col="#ff3d5a"><div class="n" id="ec-opl">0</div><div class="l">Our PO lose</div></div>
         <div class="btn cpu" data-kpi="Their PO – We Win"  data-col="#b388ff"><div class="n" id="ec-tpw">0</div><div class="l">Their PO win</div></div>
@@ -305,7 +305,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
       </div>
       <div class="divider"></div>
       <div class="sec">Attack zone entry</div>
-      <div class="grid2" style="flex:1;min-height:0;">
+      <div class="grid2" style="flex:2;min-height:0;">
         <div class="btn cg"  data-kpi="Attack Entry – Run Through 45" data-col="#00e676"><div class="n" id="ec-art">0</div><div class="l">Run Through 45</div></div>
         <div class="btn cg"  data-kpi="Attack Entry – Favorable Pass"  data-col="#00e676"><div class="n" id="ec-afp">0</div><div class="l">Favorable Pass</div></div>
         <div class="btn cb"  data-sub="atk-win"  data-col="#00d4ff"><div class="n" id="ec-acw">0</div><div class="l">Contested Win</div></div>
@@ -313,7 +313,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
       </div>
       <div class="divider"></div>
       <div class="sec">Defensive contested ball</div>
-      <div class="grid3" style="flex:1;min-height:0;">
+      <div class="grid3" style="flex:1.5;min-height:0;">
         <div class="btn cb"  data-kpi="Def Contested – Win"  data-col="#00d4ff"><div class="n" id="ec-dcw">0</div><div class="l">Def Win</div></div>
         <div class="btn cr"  data-kpi="Def Contested – Loss" data-col="#ff3d5a"><div class="n" id="ec-dcl">0</div><div class="l">Def Loss</div></div>
         <div class="btn cam" data-kpi="Opp Attack Entry"     data-col="#ffab40"><div class="n" id="ec-oae">0</div><div class="l">Opp Entry</div></div>
@@ -323,7 +323,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
     <!-- Screen 3: Misc -->
     <div class="scr" id="scr3">
       <div class="sec">Miscellaneous</div>
-      <div class="grid3" style="flex:1;min-height:0;">
+      <div class="grid3" style="flex:2;min-height:0;">
         <div class="btn cg" data-kpi="Goal Chance – Us" data-col="#00e676"><div class="n" id="ec-gcu">0</div><div class="l">Goal Chance Us</div></div>
         <div class="btn cb" data-kpi="Frees Won"        data-col="#00d4ff"><div class="n" id="ec-fw">0</div><div class="l">Frees Won</div></div>
         <div class="btn cr" data-kpi="Frees Lost"       data-col="#ff3d5a"><div class="n" id="ec-fl">0</div><div class="l">Frees Lost</div></div>
@@ -1029,10 +1029,13 @@ function renderKpiTab(c){
   html+='</div>';
 
   /* Attack Zone */
+  var aFavPct=aTotal?Math.round((aRun+aPass)/aTotal*100):null;
+
   html+='<div class="sec-lbl">Attack Zone Entry</div>';
-  html+='<div class="solo-grid">';
+  html+='<div class="solo-grid3">';
   html+=soloCard('c-green','Total Entries',esc(aTotal),'entries inside 45',null,null);
   html+=soloCard('c-blue','Contested Win %',aCBPct!==null?esc(aCBPct)+'%':'—',esc(aCW)+'W · '+esc(aCL)+'L',50,true);
+  html+=soloCard('c-green','Favorable Entry %',aFavPct!==null?esc(aFavPct)+'%':'—',esc(aRun+aPass)+' run/pass of '+esc(aTotal),null,null);
   html+='</div>';
   html+='<div class="paired-block" style="margin-bottom:6px;">';
   html+='<div class="paired-hdr" style="grid-template-columns:1fr 1fr 1fr 1fr;"><div class="ph-us">Run 45</div><div class="ph-mid" style="color:#00e676;">Fav Pass</div><div class="ph-mid">Con Win</div><div class="ph-them">Con Loss</div></div>';
