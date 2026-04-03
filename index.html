@@ -40,23 +40,6 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
 .mf input[readonly]{opacity:.55;}
 #meta-start{width:100%;padding:16px;background:linear-gradient(135deg,rgba(0,212,255,.2),rgba(0,230,118,.15));border:1.5px solid var(--accent);border-radius:var(--r-sm);color:var(--accent);font-size:14px;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;-webkit-appearance:none;appearance:none;}
 
-#dir-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:400;align-items:center;justify-content:center;padding:24px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);}
-#dir-overlay.show{display:flex;}
-.dir-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px 24px;max-width:380px;width:100%;display:flex;flex-direction:column;gap:16px;}
-.dir-box h3{font-family:var(--font-display);font-size:26px;font-weight:900;letter-spacing:3px;color:var(--amber);text-align:center;}
-.dir-box p{font-size:12px;color:var(--text-dim);text-align:center;margin-top:-8px;line-height:1.6;}
-.dir-pitch{position:relative;background:rgba(0,230,118,.04);border:1.5px solid rgba(0,230,118,.15);border-radius:12px;height:68px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
-.dpl{position:absolute;top:10%;bottom:10%;left:50%;width:1.5px;background:rgba(0,230,118,.2);}
-.dpa{position:absolute;top:50%;width:44px;height:44px;border:1.5px solid rgba(0,230,118,.2);border-radius:50%;transform:translateY(-50%);}
-.dpa.l{left:-16px;}.dpa.r{right:-16px;}
-#dir-arrow{font-size:26px;position:relative;z-index:1;}
-.dir-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.dir-btn{padding:16px 8px;border-radius:var(--r-sm);font-size:12px;font-weight:900;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border:2px solid rgba(0,230,118,.4);background:rgba(0,230,118,.1);color:var(--green);text-align:center;line-height:1.4;-webkit-appearance:none;appearance:none;}
-.dir-btn.sel{background:rgba(0,230,118,.25);border-color:var(--green);}
-#dir-confirm{width:100%;padding:14px;background:linear-gradient(135deg,rgba(255,171,64,.2),rgba(255,171,64,.1));border:1.5px solid var(--amber);border-radius:var(--r-sm);color:var(--amber);font-size:14px;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;opacity:.35;pointer-events:none;-webkit-appearance:none;appearance:none;}
-#dir-confirm.rdy{opacity:1;pointer-events:all;}
-#dir-skip{width:100%;padding:9px;background:transparent;border:1px solid rgba(107,122,153,.25);border-radius:var(--r-sm);color:var(--text-dim);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;margin-top:-4px;-webkit-appearance:none;appearance:none;}
-
 #confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:500;align-items:center;justify-content:center;padding:24px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);}
 #confirm-overlay.show{display:flex;}
 .cfm-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px 24px;max-width:340px;width:100%;text-align:center;}
@@ -104,6 +87,10 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
 .sub-btn.blue:active{background:rgba(0,212,255,.3);}
 .sub-btn.amber{background:rgba(255,171,64,.15);border-color:rgba(255,171,64,.5);color:#ffab40;}
 .sub-btn.amber:active{background:rgba(255,171,64,.3);}
+.sub-btn.purple{background:rgba(179,136,255,.15);border-color:rgba(179,136,255,.5);color:#b388ff;}
+.sub-btn.purple:active{background:rgba(179,136,255,.3);}
+.sub-btn.red{background:rgba(255,61,90,.15);border-color:rgba(255,61,90,.5);color:#ff3d5a;}
+.sub-btn.red:active{background:rgba(255,61,90,.3);}
 
 .scoreboard{background:var(--surface);border-bottom:1px solid var(--border);padding:6px 12px 5px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .sb-team{display:flex;flex-direction:column;align-items:center;}
@@ -216,6 +203,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
 .solo-card.c-amber{border-color:#3a2000;background:linear-gradient(145deg,#1a0f00,#140b00);} .solo-card.c-amber .solo-val{color:#ffab40;}
 .solo-card.c-red{border-color:#401a1a;background:linear-gradient(145deg,#200d0d,#1a0a0a);} .solo-card.c-red .solo-val{color:#ff3d5a;}
 .solo-card.c-grey{border-color:#252e40;background:linear-gradient(145deg,#141820,#0f1218);} .solo-card.c-grey .solo-val{color:#8a9bb5;}
+.solo-card.c-purple{border-color:#301a40;background:linear-gradient(145deg,#150d20,#100a1a);} .solo-card.c-purple .solo-val{color:#b388ff;}
 .raw-row{background:var(--surface);border:1.5px solid var(--border);border-radius:11px;padding:9px 14px;display:flex;align-items:center;gap:10px;margin-bottom:4px;}
 .raw-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .raw-lbl{flex:1;font-size:12px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.3px;}
@@ -324,10 +312,10 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
     <div class="scr" id="scr2">
       <div class="sec">Puck outs</div>
       <div class="grid2" style="flex:2;min-height:0;">
-        <div class="btn cpu" data-kpi="Our PO – We Win"    data-col="#b388ff"><div class="n" id="ec-opw">0</div><div class="l">Our PO win</div></div>
-        <div class="btn cr"  data-kpi="Our PO – We Lose"   data-col="#ff3d5a"><div class="n" id="ec-opl">0</div><div class="l">Our PO lose</div></div>
-        <div class="btn cpu" data-kpi="Their PO – We Win"  data-col="#b388ff"><div class="n" id="ec-tpw">0</div><div class="l">Their PO win</div></div>
-        <div class="btn cr"  data-kpi="Their PO – We Lose" data-col="#ff3d5a"><div class="n" id="ec-tpl">0</div><div class="l">Their PO lose</div></div>
+        <div class="btn cpu" data-sub="po-opw" data-col="#b388ff"><div class="n" id="ec-opw">0</div><div class="l">Our PO win</div></div>
+        <div class="btn cr"  data-sub="po-opl" data-col="#ff3d5a"><div class="n" id="ec-opl">0</div><div class="l">Our PO lose</div></div>
+        <div class="btn cpu" data-sub="po-tpw" data-col="#b388ff"><div class="n" id="ec-tpw">0</div><div class="l">Their PO win</div></div>
+        <div class="btn cr"  data-sub="po-tpl" data-col="#ff3d5a"><div class="n" id="ec-tpl">0</div><div class="l">Their PO lose</div></div>
       </div>
       <div class="divider"></div>
       <div class="sec">Attack zone entry</div>
@@ -355,9 +343,9 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
         <div class="btn cr" data-kpi="Frees Lost"       data-col="#ff3d5a"><div class="n" id="ec-fl">0</div><div class="l">Frees Lost</div></div>
       </div>
       <div class="grid3" style="flex:2;min-height:0;">
-        <div class="btn cg" data-kpi="Turnover Won"        data-col="#00e676"><div class="n" id="ec-tw">0</div><div class="l">Turnover Won</div></div>
-        <div class="btn cb" data-kpi="Mid Contest – Win"   data-col="#00d4ff"><div class="n" id="ec-mcw">0</div><div class="l">Mid Win</div></div>
-        <div class="btn cr" data-kpi="Mid Contest – Loss"  data-col="#ff3d5a"><div class="n" id="ec-mcl">0</div><div class="l">Mid Loss</div></div>
+        <div class="btn cg" data-kpi="Turnover Won"       data-col="#00e676"><div class="n" id="ec-tw">0</div><div class="l">Turnover Won</div></div>
+        <div class="btn cb" data-kpi="Mid Contest – Win"  data-col="#00d4ff"><div class="n" id="ec-mcw">0</div><div class="l">Mid Win</div></div>
+        <div class="btn cr" data-kpi="Mid Contest – Loss" data-col="#ff3d5a"><div class="n" id="ec-mcl">0</div><div class="l">Mid Loss</div></div>
       </div>
     </div>
 
@@ -408,24 +396,6 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
   <div class="stats-content" id="stats-content"></div>
 </div>
 
-<!-- Direction overlay -->
-<div id="dir-overlay">
-  <div class="dir-box">
-    <h3>&#x1F9ED; Direction &#x2014; 1st Half</h3>
-    <p>Which way are we playing in the first half?</p>
-    <div class="dir-pitch">
-      <div class="dpa l"></div><div class="dpl"></div><div class="dpa r"></div>
-      <span id="dir-arrow">&#x2192;</span>
-    </div>
-    <div class="dir-btns">
-      <button class="dir-btn" id="dir-ltr" onclick="selDir('Left to Right')">&#9664;&#x2500; Left to Right &#x2500;&#9654;</button>
-      <button class="dir-btn" id="dir-rtl" onclick="selDir('Right to Left')">&#9664;&#x2500; Right to Left &#x2500;&#9654;</button>
-    </div>
-    <button id="dir-confirm" onclick="confirmDir()">&#x1F3C1; Confirm &amp; Start Clock</button>
-    <button id="dir-skip" onclick="skipDir()">Skip &#x2014; decide later</button>
-  </div>
-</div>
-
 <!-- Confirm overlay -->
 <div id="confirm-overlay">
   <div class="cfm-box">
@@ -457,7 +427,10 @@ var gPtr=null,subOpen=false,toastT=null,clockT=null;
 var KPIS=[
   'Point \u2013 Play (Us)','Miss \u2013 Play (Us)','Point \u2013 Free (Us)','Miss \u2013 Free (Us)','Goal \u2013 Us',
   'Point \u2013 Play (Them)','Miss \u2013 Play (Them)','Point \u2013 Free (Them)','Miss \u2013 Free (Them)','Goal \u2013 Them',
-  'Our PO \u2013 We Win','Our PO \u2013 We Lose','Their PO \u2013 We Win','Their PO \u2013 We Lose',
+  'Our PO \u2013 We Win \u2013 Short','Our PO \u2013 We Win \u2013 Long',
+  'Our PO \u2013 We Lose \u2013 Short','Our PO \u2013 We Lose \u2013 Long',
+  'Their PO \u2013 We Win \u2013 Short','Their PO \u2013 We Win \u2013 Long',
+  'Their PO \u2013 We Lose \u2013 Short','Their PO \u2013 We Lose \u2013 Long',
   'Attack Entry \u2013 Run Through 45','Attack Entry \u2013 Favorable Pass',
   'Attack Entry \u2013 Contested Win \u2013 Entry','Attack Entry \u2013 Contested Win \u2013 Inside',
   'Attack Entry \u2013 Contested Loss \u2013 Entry','Attack Entry \u2013 Contested Loss \u2013 Inside',
@@ -466,6 +439,7 @@ var KPIS=[
   'Goal Chance \u2013 Us','Frees Won','Frees Lost','Turnover Won',
   'Mid Contest \u2013 Win','Mid Contest \u2013 Loss',
   /* Legacy retained for backward compat */
+  'Our PO \u2013 We Win','Our PO \u2013 We Lose','Their PO \u2013 We Win','Their PO \u2013 We Lose',
   'Contested Win','Contested Loss','T/O Forced (Us)','Unforced Loss'
 ];
 
@@ -474,6 +448,11 @@ KPI_COL['Point \u2013 Play (Us)']='#00e676';KPI_COL['Miss \u2013 Play (Us)']='#f
 KPI_COL['Point \u2013 Free (Us)']='#00e676';KPI_COL['Miss \u2013 Free (Us)']='#ffe082';KPI_COL['Goal \u2013 Us']='#00e676';
 KPI_COL['Point \u2013 Play (Them)']='#ff3d5a';KPI_COL['Miss \u2013 Play (Them)']='#ffab40';
 KPI_COL['Point \u2013 Free (Them)']='#ff3d5a';KPI_COL['Miss \u2013 Free (Them)']='#ffab40';KPI_COL['Goal \u2013 Them']='#ff3d5a';
+KPI_COL['Our PO \u2013 We Win \u2013 Short']='#b388ff';KPI_COL['Our PO \u2013 We Win \u2013 Long']='#b388ff';
+KPI_COL['Our PO \u2013 We Lose \u2013 Short']='#ff3d5a';KPI_COL['Our PO \u2013 We Lose \u2013 Long']='#ff3d5a';
+KPI_COL['Their PO \u2013 We Win \u2013 Short']='#b388ff';KPI_COL['Their PO \u2013 We Win \u2013 Long']='#b388ff';
+KPI_COL['Their PO \u2013 We Lose \u2013 Short']='#ff3d5a';KPI_COL['Their PO \u2013 We Lose \u2013 Long']='#ff3d5a';
+/* Legacy puck out colours */
 KPI_COL['Our PO \u2013 We Win']='#b388ff';KPI_COL['Our PO \u2013 We Lose']='#ff3d5a';
 KPI_COL['Their PO \u2013 We Win']='#b388ff';KPI_COL['Their PO \u2013 We Lose']='#ff3d5a';
 KPI_COL['Attack Entry \u2013 Run Through 45']='#00e676';KPI_COL['Attack Entry \u2013 Favorable Pass']='#00e676';
@@ -485,27 +464,49 @@ KPI_COL['Goal Chance \u2013 Us']='#00e676';KPI_COL['Frees Won']='#00d4ff';KPI_CO
 KPI_COL['Mid Contest \u2013 Win']='#00d4ff';KPI_COL['Mid Contest \u2013 Loss']='#ff3d5a';
 KPI_COL['Contested Win']='#00d4ff';KPI_COL['Contested Loss']='#ff3d5a';KPI_COL['T/O Forced (Us)']='#00d4ff';KPI_COL['Unforced Loss']='#ffab40';
 
-/* KPI → button count element id */
+/* KPI → button count element id (combined totals for puck outs) */
 var COUNT_EL={};
 COUNT_EL['Point \u2013 Play (Us)']='ec-ppu';COUNT_EL['Miss \u2013 Play (Us)']='ec-mpu';
 COUNT_EL['Point \u2013 Free (Us)']='ec-pfu';COUNT_EL['Miss \u2013 Free (Us)']='ec-mfu';COUNT_EL['Goal \u2013 Us']='ec-gu';
 COUNT_EL['Point \u2013 Play (Them)']='ec-ppt';COUNT_EL['Miss \u2013 Play (Them)']='ec-mpt';
 COUNT_EL['Point \u2013 Free (Them)']='ec-pft';COUNT_EL['Miss \u2013 Free (Them)']='ec-mft';COUNT_EL['Goal \u2013 Them']='ec-gt';
-COUNT_EL['Our PO \u2013 We Win']='ec-opw';COUNT_EL['Our PO \u2013 We Lose']='ec-opl';
-COUNT_EL['Their PO \u2013 We Win']='ec-tpw';COUNT_EL['Their PO \u2013 We Lose']='ec-tpl';
 COUNT_EL['Attack Entry \u2013 Run Through 45']='ec-art';COUNT_EL['Attack Entry \u2013 Favorable Pass']='ec-afp';
 COUNT_EL['Def Contested \u2013 Win']='ec-dcw';COUNT_EL['Def Contested \u2013 Loss']='ec-dcl';COUNT_EL['Opp Attack Entry']='ec-oae';
 COUNT_EL['Goal Chance \u2013 Us']='ec-gcu';COUNT_EL['Frees Won']='ec-fw';COUNT_EL['Frees Lost']='ec-fl';
 COUNT_EL['Turnover Won']='ec-tw';
 COUNT_EL['Mid Contest \u2013 Win']='ec-mcw';COUNT_EL['Mid Contest \u2013 Loss']='ec-mcl';
 
+/* Puck out button counter groups — key → [kpis that feed it] */
+var PO_BTN_GROUPS={
+  'ec-opw':['Our PO \u2013 We Win \u2013 Short','Our PO \u2013 We Win \u2013 Long','Our PO \u2013 We Win'],
+  'ec-opl':['Our PO \u2013 We Lose \u2013 Short','Our PO \u2013 We Lose \u2013 Long','Our PO \u2013 We Lose'],
+  'ec-tpw':['Their PO \u2013 We Win \u2013 Short','Their PO \u2013 We Win \u2013 Long','Their PO \u2013 We Win'],
+  'ec-tpl':['Their PO \u2013 We Lose \u2013 Short','Their PO \u2013 We Lose \u2013 Long','Their PO \u2013 We Lose']
+};
+
 /* Sub-screen configs */
 var SUB_CONFIGS={
-  'atk-win':{colour:'blue',btns:[
+  'po-opw':{title:'Our PO Win \u2013 Distance',colour:'purple',btns:[
+    {label:'Short',kpi:'Our PO \u2013 We Win \u2013 Short'},
+    {label:'Long', kpi:'Our PO \u2013 We Win \u2013 Long'}
+  ]},
+  'po-opl':{title:'Our PO Loss \u2013 Distance',colour:'red',btns:[
+    {label:'Short',kpi:'Our PO \u2013 We Lose \u2013 Short'},
+    {label:'Long', kpi:'Our PO \u2013 We Lose \u2013 Long'}
+  ]},
+  'po-tpw':{title:'Their PO Win \u2013 Distance',colour:'purple',btns:[
+    {label:'Short',kpi:'Their PO \u2013 We Win \u2013 Short'},
+    {label:'Long', kpi:'Their PO \u2013 We Win \u2013 Long'}
+  ]},
+  'po-tpl':{title:'Their PO Loss \u2013 Distance',colour:'red',btns:[
+    {label:'Short',kpi:'Their PO \u2013 We Lose \u2013 Short'},
+    {label:'Long', kpi:'Their PO \u2013 We Lose \u2013 Long'}
+  ]},
+  'atk-win':{title:'Contested Win \u2013 How?',colour:'blue',btns:[
     {label:'Entry', kpi:'Attack Entry \u2013 Contested Win \u2013 Entry'},
     {label:'Inside',kpi:'Attack Entry \u2013 Contested Win \u2013 Inside'}
   ]},
-  'atk-loss':{colour:'amber',btns:[
+  'atk-loss':{title:'Contested Loss \u2013 How?',colour:'amber',btns:[
     {label:'Entry',   kpi:'Attack Entry \u2013 Contested Loss \u2013 Entry'},
     {label:'Inside',  kpi:'Attack Entry \u2013 Contested Loss \u2013 Inside'},
     {label:'Unforced',kpi:'Attack Entry \u2013 Contested Loss \u2013 Unforced'}
@@ -514,9 +515,9 @@ var SUB_CONFIGS={
 
 var VALID_FLOWS=['pre','first_half','half_time','second_half','ended'];
 var eventLog=[],counts={};
-var meta={opposition:'',competition:'',venue:'',date:'',directionFirstHalf:''};
+var meta={opposition:'',competition:'',venue:'',date:''};
 var state={gameFlow:'pre',fhStart:null,fhEnd:null,fhPausedMs:0,shStart:null,shEnd:null,shPausedMs:0,pausedAt:null};
-var curScreen=1,statQ='match',statTab='kpi',pendingDir='',pendingCfm=null;
+var curScreen=1,statQ='match',statTab='kpi',pendingCfm=null;
 var storageOk=true,storageType='local';
 
 /* ── Storage helpers ── */
@@ -582,7 +583,7 @@ function validateState(s){
 }
 function validateMeta(m){
   if(!m||typeof m!=='object')return false;
-  var sf=['opposition','competition','venue','date','directionFirstHalf'];
+  var sf=['opposition','competition','venue','date'];
   for(var i=0;i<sf.length;i++){
     var f=sf[i];
     if(m[f]!==undefined&&typeof m[f]!=='string')return false;
@@ -628,8 +629,7 @@ function submitMeta(){
     opposition:sanitiseStr(document.getElementById('mi-opp').value,60)||'\u2014',
     competition:sanitiseStr(document.getElementById('mi-comp').value,60)||'\u2014',
     venue:sanitiseStr(document.getElementById('mi-venue').value,60)||'\u2014',
-    date:sanitiseStr(document.getElementById('mi-date').value,40),
-    directionFirstHalf:meta.directionFirstHalf||''
+    date:sanitiseStr(document.getElementById('mi-date').value,40)
   };
   lsSet(SMK,JSON.stringify(meta));
   document.getElementById('screen-meta').classList.add('hidden');
@@ -654,11 +654,10 @@ function setupSubOverlay(){
   overlay.addEventListener('mousedown',dismissIfOutside);
 }
 
-function openSubOverlay(subKey,anchorEl){
+function openSubOverlay(subKey){
   var cfg=SUB_CONFIGS[subKey];if(!cfg)return;
   var panel=document.getElementById('sub-panel');if(!panel)return;
-  var title=subKey==='atk-win'?'Contested Win \u2013 How?':'Contested Loss \u2013 How?';
-  var html='<div class="sub-sheet-hdr"><div class="sub-sheet-title">'+esc(title)+'</div><div class="sub-sheet-cancel" id="sub-cancel">Cancel</div></div>';
+  var html='<div class="sub-sheet-hdr"><div class="sub-sheet-title">'+esc(cfg.title)+'</div><div class="sub-sheet-cancel" id="sub-cancel">Cancel</div></div>';
   for(var i=0;i<cfg.btns.length;i++){
     var b=cfg.btns[i];
     html+='<div class="sub-btn '+cfg.colour+'" data-kpi="'+esc(b.kpi)+'" data-col="'+(KPI_COL[b.kpi]||'#888')+'">'+esc(b.label)+'</div>';
@@ -675,7 +674,7 @@ function openSubOverlay(subKey,anchorEl){
   for(var i=0;i<btns.length;i++){
     (function(btn){
       function fire(e){e.stopPropagation();e.preventDefault();var kpi=btn.getAttribute('data-kpi');var col=btn.getAttribute('data-col');closeSubOverlay();doTap(kpi,col);}
-      btn.addEventListener('touchstart',fire,{passive:true});
+      btn.addEventListener('touchstart',fire,{passive:false});
       btn.addEventListener('click',fire);
     })(btns[i]);
   }
@@ -747,7 +746,7 @@ function onTouchEnd(e){
     try{if(navigator.vibrate)navigator.vibrate([6,20,6]);}catch(ex){}
   }
   if(gPtr.subTrigger&&gPtr.intent!=='swipe'&&gPtr.intent!=='cancelled'&&!gPtr.fired){
-    if(subOpen)closeSubOverlay();else openSubOverlay(gPtr.subTrigger,gPtr.btn);
+    if(subOpen)closeSubOverlay();else openSubOverlay(gPtr.subTrigger);
   }
   if(gPtr.btn&&!gPtr.fired)resetBtnStyle(gPtr.btn);
   gPtr=null;
@@ -761,25 +760,6 @@ function onTouchCancel(){
 }
 
 function resetBtnStyle(btn){if(btn){btn.style.transition='';btn.style.opacity='';}}
-
-/* ── Direction modal ── */
-function showDirModal(){
-  pendingDir='';
-  document.getElementById('dir-ltr').classList.remove('sel');
-  document.getElementById('dir-rtl').classList.remove('sel');
-  document.getElementById('dir-confirm').classList.remove('rdy');
-  document.getElementById('dir-arrow').textContent='\u2192';
-  document.getElementById('dir-overlay').classList.add('show');
-}
-function selDir(v){
-  pendingDir=v;
-  document.getElementById('dir-ltr').classList.toggle('sel',v==='Left to Right');
-  document.getElementById('dir-rtl').classList.toggle('sel',v==='Right to Left');
-  document.getElementById('dir-arrow').textContent=v==='Left to Right'?'\u2192':'\u2190';
-  document.getElementById('dir-confirm').classList.add('rdy');
-}
-function confirmDir(){if(!pendingDir)return;meta.directionFirstHalf=pendingDir;lsSet(SMK,JSON.stringify(meta));document.getElementById('dir-overlay').classList.remove('show');doStartGame();}
-function skipDir(){document.getElementById('dir-overlay').classList.remove('show');doStartGame();}
 
 /* ── Confirm modal ── */
 function showConfirm(title,msg,action,isPos){
@@ -831,7 +811,7 @@ function tickClock(){
 /* ── Game flow ── */
 function handleFlow(){
   var gf=state.gameFlow;
-  if(gf==='pre'){meta.directionFirstHalf?doStartGame():showDirModal();return;}
+  if(gf==='pre'){doStartGame();return;}
   if(gf==='first_half'){showConfirm('End 1st Half','Mark first half finished?',doEndFirstHalf,false);return;}
   if(gf==='half_time'){showConfirm('Start 2nd Half','Start second half clock?',doStartSecondHalf,true);return;}
   if(gf==='second_half'){showConfirm('End Game','Mark match as finished?',doEndGame,false);return;}
@@ -859,7 +839,7 @@ function doEndGame(){
 }
 function doNewGame(){
   eventLog=[];
-  meta={opposition:'',competition:'',venue:'',date:'',directionFirstHalf:''};
+  meta={opposition:'',competition:'',venue:'',date:''};
   state={gameFlow:'pre',fhStart:null,fhEnd:null,fhPausedMs:0,shStart:null,shEnd:null,shPausedMs:0,pausedAt:null};
   KPIS.forEach(function(k){counts[k]=0;});
   lsSet(SK,JSON.stringify(eventLog));lsRemove(SMK);lsSet(SSK,JSON.stringify(state));
@@ -928,6 +908,17 @@ function refreshCountDisplays(){
     var el=document.getElementById(COUNT_EL[k]);
     if(el)el.textContent=counts[k]||0;
   }
+  /* Puck out combined totals (Short + Long + any legacy) */
+  for(var elId in PO_BTN_GROUPS){
+    if(!PO_BTN_GROUPS.hasOwnProperty(elId))continue;
+    var el=document.getElementById(elId);
+    if(!el)continue;
+    var total=0;
+    var kpis=PO_BTN_GROUPS[elId];
+    for(var i=0;i<kpis.length;i++)total+=(counts[kpis[i]]||0);
+    el.textContent=total;
+  }
+  /* Attack entry combined totals */
   var acw=(counts['Attack Entry \u2013 Contested Win \u2013 Entry']||0)+(counts['Attack Entry \u2013 Contested Win \u2013 Inside']||0);
   var acl=(counts['Attack Entry \u2013 Contested Loss \u2013 Entry']||0)+(counts['Attack Entry \u2013 Contested Loss \u2013 Inside']||0)+(counts['Attack Entry \u2013 Contested Loss \u2013 Unforced']||0);
   var e1=document.getElementById('ec-acw');if(e1)e1.textContent=acw;
@@ -935,13 +926,21 @@ function refreshCountDisplays(){
 }
 function cnt(k){return counts[k]||0;}
 
+/* Puck out combined count helper (Short + Long + legacy) */
+function cntPO(base,qs){
+  var short=base+' \u2013 Short';
+  var long=base+' \u2013 Long';
+  if(qs){return cntQ(short,qs)+cntQ(long,qs)+cntQ(base,qs);}
+  return cnt(short)+cnt(long)+cnt(base);
+}
+
 /* ── Log event ── */
 function doTap(kpi,col){
   if(!kpi){return;}
   if(state.pausedAt!==null){toast('Paused \u2014 tap Resume first');return;}
   if(state.gameFlow==='half_time'){toast('Half Time \u2014 tap 2nd Half');return;}
   if(state.gameFlow==='ended'){toast('Full Time');return;}
-  if(state.gameFlow==='pre'){meta.directionFirstHalf?doStartGame():showDirModal();return;}
+  if(state.gameFlow==='pre'){doStartGame();return;}
   if(KPIS.indexOf(kpi)===-1){toast('Unknown event');return;}
 
   var now=Date.now();
@@ -955,8 +954,24 @@ function doTap(kpi,col){
   lsSet(SK,JSON.stringify(eventLog));
   counts[kpi]=(counts[kpi]||0)+1;
 
+  /* Update individual KPI counter if mapped */
   var elId=COUNT_EL[kpi];
   if(elId){var el=document.getElementById(elId);if(el){el.textContent=counts[kpi];animatePop(el);}}
+
+  /* Update puck out combined button counters */
+  for(var btnId in PO_BTN_GROUPS){
+    if(!PO_BTN_GROUPS.hasOwnProperty(btnId))continue;
+    if(PO_BTN_GROUPS[btnId].indexOf(kpi)>-1){
+      var el=document.getElementById(btnId);
+      if(el){
+        var total=0;
+        var kpis=PO_BTN_GROUPS[btnId];
+        for(var i=0;i<kpis.length;i++)total+=(counts[kpis[i]]||0);
+        el.textContent=total;animatePop(el);
+      }
+    }
+  }
+
   if(kpi.indexOf('Attack Entry \u2013 Contested Win')===0){
     var acw=(counts['Attack Entry \u2013 Contested Win \u2013 Entry']||0)+(counts['Attack Entry \u2013 Contested Win \u2013 Inside']||0);
     var e=document.getElementById('ec-acw');if(e){e.textContent=acw;animatePop(e);}
@@ -1041,11 +1056,14 @@ function cntQ(kpi,qs){
   for(var i=0;i<eventLog.length;i++){var e=eventLog[i];if(e.kpi===kpi&&qs.indexOf(e.quarter)>-1)n++;}
   return n;
 }
+function cntPOq(base,qs){
+  return cntQ(base+' \u2013 Short',qs)+cntQ(base+' \u2013 Long',qs)+cntQ(base,qs);
+}
 
 function renderStats(){
   try{
     var qs=getQs(statQ),c=function(k){return cntQ(k,qs);};
-    if(statTab==='kpi')renderKpiTab(c);
+    if(statTab==='kpi')renderKpiTab(c,qs);
     else if(statTab==='raw')renderRawTab(c);
     else if(statTab==='ht')renderHtTab();
   }catch(e){
@@ -1054,7 +1072,7 @@ function renderStats(){
 }
 
 /* ── KPI Tab ── */
-function renderKpiTab(c){
+function renderKpiTab(c,qs){
   var gU=c('Goal \u2013 Us'),ppU=c('Point \u2013 Play (Us)'),pfU=c('Point \u2013 Free (Us)');
   var pmU=c('Miss \u2013 Play (Us)'),fmU=c('Miss \u2013 Free (Us)');
   var shotsU=gU+ppU+pfU+pmU+fmU,scoresU=gU+ppU+pfU;
@@ -1071,10 +1089,18 @@ function renderKpiTab(c){
   var playAccT=playT?Math.round(ppT/playT*100):null;
   var freeAccT=freesT?Math.round(pfT/freesT*100):null;
 
-  var opW=c('Our PO \u2013 We Win'),opL=c('Our PO \u2013 We Lose');
-  var tpW=c('Their PO \u2013 We Win'),tpL=c('Their PO \u2013 We Lose');
+  /* Puck outs — combine Short + Long + legacy */
+  var opW=cntPOq('Our PO \u2013 We Win',qs);
+  var opL=cntPOq('Our PO \u2013 We Lose',qs);
+  var tpW=cntPOq('Their PO \u2013 We Win',qs);
+  var tpL=cntPOq('Their PO \u2013 We Lose',qs);
   var opPct=opW+opL?Math.round(opW/(opW+opL)*100):null;
   var tpPct=tpW+tpL?Math.round(tpW/(tpW+tpL)*100):null;
+  /* Short/Long breakdown */
+  var opWS=c('Our PO \u2013 We Win \u2013 Short'),opWL=c('Our PO \u2013 We Win \u2013 Long');
+  var opLS=c('Our PO \u2013 We Lose \u2013 Short'),opLL=c('Our PO \u2013 We Lose \u2013 Long');
+  var tpWS=c('Their PO \u2013 We Win \u2013 Short'),tpWL=c('Their PO \u2013 We Win \u2013 Long');
+  var tpLS=c('Their PO \u2013 We Lose \u2013 Short'),tpLL=c('Their PO \u2013 We Lose \u2013 Long');
 
   var aRun=c('Attack Entry \u2013 Run Through 45');
   var aPass=c('Attack Entry \u2013 Favorable Pass');
@@ -1098,6 +1124,8 @@ function renderKpiTab(c){
   var mWPct=mW+mL?Math.round(mW/(mW+mL)*100):null;
 
   var html='';
+
+  /* Shooting */
   html+='<div class="sec-lbl">Shooting</div><div class="paired-block">';
   html+='<div class="paired-hdr"><div class="ph-us">Us</div><div class="ph-mid">Metric</div><div class="ph-them">Them</div></div>';
   html+=mRow(esc(scoresU),(gU?esc(gU)+'g ':'')+esc(ppU+pfU)+'p',null,null,'Scores',esc(scoresT),(gT?esc(gT)+'g ':'')+esc(ppT+pfT)+'p',null,null);
@@ -1107,11 +1135,19 @@ function renderKpiTab(c){
   html+=mRow(freeAccU!==null?esc(freeAccU)+'%':'\u2014',esc(pfU)+' pts / '+esc(freesU)+' frees',null,null,'Free %',freeAccT!==null?esc(freeAccT)+'%':'\u2014',esc(pfT)+' pts / '+esc(freesT)+' frees',null,null);
   html+='</div>';
 
+  /* Puck Outs */
   html+='<div class="sec-lbl">Puck Outs</div><div class="paired-block">';
   html+='<div class="paired-hdr"><div class="ph-us">Our PO</div><div class="ph-mid">Win %</div><div class="ph-them">Their PO</div></div>';
   html+=mRow(opPct!==null?esc(opPct)+'%':'\u2014',esc(opW)+'W \u00B7 '+esc(opL)+'L',70,true,'Win %',tpPct!==null?esc(tpPct)+'%':'\u2014',esc(tpW)+'W \u00B7 '+esc(tpL)+'L',50,true);
+  /* Short/Long breakdown row */
+  html+='<div class="metric-row" style="grid-template-columns:1fr auto 1fr;">';
+  html+='<div class="mr-us"><div class="mr-sub">S: '+esc(opWS)+'W \u00B7 '+esc(opLS)+'L</div><div class="mr-sub">L: '+esc(opWL)+'W \u00B7 '+esc(opLL)+'L</div></div>';
+  html+='<div class="mr-lbl">S/L Split</div>';
+  html+='<div class="mr-them"><div class="mr-sub">S: '+esc(tpWS)+'W \u00B7 '+esc(tpLS)+'L</div><div class="mr-sub">L: '+esc(tpWL)+'W \u00B7 '+esc(tpLL)+'L</div></div>';
+  html+='</div>';
   html+='</div>';
 
+  /* Attack Zone Entry */
   html+='<div class="sec-lbl">Attack Zone Entry</div>';
   html+='<div class="solo-grid3">';
   html+=soloCard('c-green','Total Entries',esc(aTotal),'entries inside 45',null,null);
@@ -1127,6 +1163,7 @@ function renderKpiTab(c){
   html+='<div class="mr-them"><div class="mr-val" style="font-size:32px;">'+esc(aCL)+'</div><div class="mr-sub">E:'+esc(aCLE)+' I:'+esc(aCLI)+' U:'+esc(aCLU)+'</div></div>';
   html+='</div></div>';
 
+  /* Defensive Contested Ball */
   html+='<div class="sec-lbl">Defensive Contested Ball</div>';
   html+='<div class="solo-grid3">';
   html+=soloCard('c-blue','Def Win %',dWPct!==null?esc(dWPct)+'%':'\u2014',esc(dW)+'W \u00B7 '+esc(dL)+'L',50,true);
@@ -1134,6 +1171,7 @@ function renderKpiTab(c){
   html+=soloCard('c-grey','Def Loss',esc(dL),'physical battles lost',null,null);
   html+='</div>';
 
+  /* Misc */
   html+='<div class="sec-lbl">Misc</div>';
   html+='<div class="solo-grid3">';
   html+=soloCard('c-green','Goal Chances',esc(gc),'clear goal opps',null,null);
@@ -1179,10 +1217,14 @@ function renderRawTab(c){
       {cls:'rr',lbl:'Goal (Them)',      kpi:'Goal \u2013 Them'}
     ]},
     {lbl:'Puck Outs',rows:[
-      {cls:'rp',lbl:'Our PO Win',   kpi:'Our PO \u2013 We Win'},
-      {cls:'rr',lbl:'Our PO Lose',  kpi:'Our PO \u2013 We Lose'},
-      {cls:'rp',lbl:'Their PO Win', kpi:'Their PO \u2013 We Win'},
-      {cls:'rr',lbl:'Their PO Lose',kpi:'Their PO \u2013 We Lose'}
+      {cls:'rp',lbl:'Our PO Win \u2013 Short',   kpi:'Our PO \u2013 We Win \u2013 Short'},
+      {cls:'rp',lbl:'Our PO Win \u2013 Long',    kpi:'Our PO \u2013 We Win \u2013 Long'},
+      {cls:'rr',lbl:'Our PO Lose \u2013 Short',  kpi:'Our PO \u2013 We Lose \u2013 Short'},
+      {cls:'rr',lbl:'Our PO Lose \u2013 Long',   kpi:'Our PO \u2013 We Lose \u2013 Long'},
+      {cls:'rp',lbl:'Their PO Win \u2013 Short', kpi:'Their PO \u2013 We Win \u2013 Short'},
+      {cls:'rp',lbl:'Their PO Win \u2013 Long',  kpi:'Their PO \u2013 We Win \u2013 Long'},
+      {cls:'rr',lbl:'Their PO Lose \u2013 Short',kpi:'Their PO \u2013 We Lose \u2013 Short'},
+      {cls:'rr',lbl:'Their PO Lose \u2013 Long', kpi:'Their PO \u2013 We Lose \u2013 Long'}
     ]},
     {lbl:'Attack Zone Entry',rows:[
       {cls:'rg',lbl:'Run Through 45',             kpi:'Attack Entry \u2013 Run Through 45'},
@@ -1245,13 +1287,21 @@ function renderHtTab(){
   var dW2=c2('Def Contested \u2013 Win'),dL2=c2('Def Contested \u2013 Loss');
   var dWfh=cfh('Def Contested \u2013 Win'),dLfh=cfh('Def Contested \u2013 Loss');
 
+  /* Puck out totals for HT tab (Short+Long+legacy) */
+  var opW1=cntPOq('Our PO \u2013 We Win',[1]),opL1=cntPOq('Our PO \u2013 We Lose',[1]);
+  var opW2=cntPOq('Our PO \u2013 We Win',[2]),opL2=cntPOq('Our PO \u2013 We Lose',[2]);
+  var opWfh=cntPOq('Our PO \u2013 We Win',[1,2]),opLfh=cntPOq('Our PO \u2013 We Lose',[1,2]);
+  var tpW1=cntPOq('Their PO \u2013 We Win',[1]),tpL1=cntPOq('Their PO \u2013 We Lose',[1]);
+  var tpW2=cntPOq('Their PO \u2013 We Win',[2]),tpL2=cntPOq('Their PO \u2013 We Lose',[2]);
+  var tpWfh=cntPOq('Their PO \u2013 We Win',[1,2]),tpLfh=cntPOq('Their PO \u2013 We Lose',[1,2]);
+
   var rows=[
     ['Scores (Us)',     '\u22655/qtr', sc1U, sc2U, sc1U+sc2U],
     ['Scores (Them)',   '\u22644/qtr', c1('Goal \u2013 Them')+c1('Point \u2013 Play (Them)')+c1('Point \u2013 Free (Them)'), c2('Goal \u2013 Them')+c2('Point \u2013 Play (Them)')+c2('Point \u2013 Free (Them)'), cfh('Goal \u2013 Them')+cfh('Point \u2013 Play (Them)')+cfh('Point \u2013 Free (Them)')],
     ['Shots (Us)',      '\u2014',      sh1U, sh2U, shfhU],
     ['Shooting % (Us)', '\u226570%',  fp(sh1U?Math.round(sc1U/sh1U*100):null), fp(sh2U?Math.round(sc2U/sh2U*100):null), fp(shfhU?Math.round((sc1U+sc2U)/shfhU*100):null)],
-    ['Our PO Win %',    '\u226570%',  fp(pct(c1('Our PO \u2013 We Win'),c1('Our PO \u2013 We Win')+c1('Our PO \u2013 We Lose'))), fp(pct(c2('Our PO \u2013 We Win'),c2('Our PO \u2013 We Win')+c2('Our PO \u2013 We Lose'))), fp(pct(cfh('Our PO \u2013 We Win'),cfh('Our PO \u2013 We Win')+cfh('Our PO \u2013 We Lose')))],
-    ['Their PO Win %',  '\u226550%',  fp(pct(c1('Their PO \u2013 We Win'),c1('Their PO \u2013 We Win')+c1('Their PO \u2013 We Lose'))), fp(pct(c2('Their PO \u2013 We Win'),c2('Their PO \u2013 We Win')+c2('Their PO \u2013 We Lose'))), fp(pct(cfh('Their PO \u2013 We Win'),cfh('Their PO \u2013 We Win')+cfh('Their PO \u2013 We Lose')))],
+    ['Our PO Win %',    '\u226570%',  fp(pct(opW1,opW1+opL1)), fp(pct(opW2,opW2+opL2)), fp(pct(opWfh,opWfh+opLfh))],
+    ['Their PO Win %',  '\u226550%',  fp(pct(tpW1,tpW1+tpL1)), fp(pct(tpW2,tpW2+tpL2)), fp(pct(tpWfh,tpWfh+tpLfh))],
     ['Attack Entries',  '\u2014',     aW1+aL1, aW2+aL2, aWfh+aLfh],
     ['Attack CB Win %', '\u226550%',  fp(pct(aW1,aW1+aL1)), fp(pct(aW2,aW2+aL2)), fp(pct(aWfh,aWfh+aLfh))],
     ['Opp Entries',     '\u2014',     c1('Opp Attack Entry'), c2('Opp Attack Entry'), cfh('Opp Attack Entry')],
@@ -1283,7 +1333,6 @@ function doCSV(){
       'Competition,'+csvSafe(meta.competition),
       'Venue,'+csvSafe(meta.venue),
       'Date,'+csvSafe(meta.date),
-      'Direction H1,'+csvSafe(meta.directionFirstHalf),
       '','Event Log','Event,Quarter,MatchTime,Timestamp_ms'
     ];
     for(var i=0;i<eventLog.length;i++){
