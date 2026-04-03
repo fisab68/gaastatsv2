@@ -2,7 +2,7 @@
    Cache-first strategy. Single file app — only the HTML needs caching.
    Bump CACHE_VERSION when deploying a new version of gaa_app-19.html */
 
-var CACHE_VERSION = 'gaa-v19-2';
+var CACHE_VERSION = 'gaa-v19-3';
 var FILES_TO_CACHE = [
   '/gaastats1999/gaa_app-19.html',
   '/gaastats1999/'   /* also cache the root path in case that's the entry point */
