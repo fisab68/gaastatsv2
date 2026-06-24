@@ -1123,48 +1123,41 @@ function renderRawTab(c){
 }
 
 function renderHtTab(){
-  var c1=function(k){return cntQ(k,[1]);},c2=function(k){return cntQ(k,[2]);},cfh=function(k){return cntQ(k,[1,2]);};
   var fp=function(v){return v===null?'\u2014':v+'%';};
   var pct=function(w,t){return t===0?null:Math.round(w/t*100);};
 
-  var sc1U=c1('Goal \u2013 Us')+c1('Point \u2013 Play (Us)')+c1('Point \u2013 Free (Us)');
-  var sc2U=c2('Goal \u2013 Us')+c2('Point \u2013 Play (Us)')+c2('Point \u2013 Free (Us)');
-  var sh1U=sc1U+c1('Miss \u2013 Play (Us)')+c1('Miss \u2013 Free (Us)');
-  var sh2U=sc2U+c2('Miss \u2013 Play (Us)')+c2('Miss \u2013 Free (Us)');
-  var shfhU=sh1U+sh2U;
+  /* Open-play contested ball, all zones combined */
+  function cbW(q){return cntQ('Attack \u2013 Contested Win',[q])+cntQ('Mid \u2013 Contested Win',[q])+cntQ('Def \u2013 Contested Win',[q]);}
+  function cbL(q){return cntQ('Attack \u2013 Contested Loss',[q])+cntQ('Mid \u2013 Contested Loss',[q])+cntQ('Def \u2013 Contested Loss',[q]);}
+  /* Our restarts (puck-outs) */
+  function opW(q){return cntQ('Our PO \u2013 We Win \u2013 Short',[q])+cntQ('Our PO \u2013 We Win \u2013 Long',[q]);}
+  function opL(q){return cntQ('Our PO \u2013 We Lose \u2013 Short',[q])+cntQ('Our PO \u2013 We Lose \u2013 Long',[q]);}
+  /* Their restarts (our success) */
+  function tpW(q){return cntQ('Their PO \u2013 We Win \u2013 Short',[q])+cntQ('Their PO \u2013 We Win \u2013 Long',[q]);}
+  function tpL(q){return cntQ('Their PO \u2013 We Lose \u2013 Short',[q])+cntQ('Their PO \u2013 We Lose \u2013 Long',[q]);}
+  /* Shots = scores + misses (goal counts as a shot; missed goal chance not counted) */
+  function shU(q){return cntQ('Goal \u2013 Us',[q])+cntQ('Point \u2013 Play (Us)',[q])+cntQ('Point \u2013 Free (Us)',[q])+cntQ('Miss \u2013 Play (Us)',[q])+cntQ('Miss \u2013 Free (Us)',[q]);}
+  function shT(q){return cntQ('Goal \u2013 Them',[q])+cntQ('Point \u2013 Play (Them)',[q])+cntQ('Point \u2013 Free (Them)',[q])+cntQ('Miss \u2013 Play (Them)',[q])+cntQ('Miss \u2013 Free (Them)',[q]);}
+  /* Scores weighted to the scoreboard: goal = 3, point = 1 */
+  function scU(q){return 3*cntQ('Goal \u2013 Us',[q])+cntQ('Point \u2013 Play (Us)',[q])+cntQ('Point \u2013 Free (Us)',[q]);}
+  function scT(q){return 3*cntQ('Goal \u2013 Them',[q])+cntQ('Point \u2013 Play (Them)',[q])+cntQ('Point \u2013 Free (Them)',[q]);}
 
-  var opW1=c1('Our PO \u2013 We Win \u2013 Short')+c1('Our PO \u2013 We Win \u2013 Long');
-  var opL1=c1('Our PO \u2013 We Lose \u2013 Short')+c1('Our PO \u2013 We Lose \u2013 Long');
-  var opW2=c2('Our PO \u2013 We Win \u2013 Short')+c2('Our PO \u2013 We Win \u2013 Long');
-  var opL2=c2('Our PO \u2013 We Lose \u2013 Short')+c2('Our PO \u2013 We Lose \u2013 Long');
-  var tpW1=c1('Their PO \u2013 We Win \u2013 Short')+c1('Their PO \u2013 We Win \u2013 Long');
-  var tpL1=c1('Their PO \u2013 We Lose \u2013 Short')+c1('Their PO \u2013 We Lose \u2013 Long');
-  var tpW2=c2('Their PO \u2013 We Win \u2013 Short')+c2('Their PO \u2013 We Win \u2013 Long');
-  var tpL2=c2('Their PO \u2013 We Lose \u2013 Short')+c2('Their PO \u2013 We Lose \u2013 Long');
-
-  var aCW1=c1('Attack \u2013 Contested Win'),aCL1=c1('Attack \u2013 Contested Loss');
-  var aCW2=c2('Attack \u2013 Contested Win'),aCL2=c2('Attack \u2013 Contested Loss');
-  var dCW1=c1('Def \u2013 Contested Win'),dCL1=c1('Def \u2013 Contested Loss');
-  var dCW2=c2('Def \u2013 Contested Win'),dCL2=c2('Def \u2013 Contested Loss');
-  var mCW1=c1('Mid \u2013 Contested Win'),mCL1=c1('Mid \u2013 Contested Loss');
-  var mCW2=c2('Mid \u2013 Contested Win'),mCL2=c2('Mid \u2013 Contested Loss');
+  /* build a % row: label, then Q1 / Q2 / (Q1+Q2 total) of won ÷ total */
+  function rowPct(label, wf, tf){
+    var w1=wf(1),t1=tf(1),w2=wf(2),t2=tf(2);
+    return [label, fp(pct(w1,t1)), fp(pct(w2,t2)), fp(pct(w1+w2,t1+t2))];
+  }
 
   var rows=[
-    ['Scores (Us)','\u22655/qtr',sc1U,sc2U,sc1U+sc2U],
-    ['Scores (Them)','\u22644/qtr',c1('Goal \u2013 Them')+c1('Point \u2013 Play (Them)')+c1('Point \u2013 Free (Them)'),c2('Goal \u2013 Them')+c2('Point \u2013 Play (Them)')+c2('Point \u2013 Free (Them)'),cfh('Goal \u2013 Them')+cfh('Point \u2013 Play (Them)')+cfh('Point \u2013 Free (Them)')],
-    ['Shooting % (Us)','\u226570%',fp(sh1U?Math.round(sc1U/sh1U*100):null),fp(sh2U?Math.round(sc2U/sh2U*100):null),fp(shfhU?Math.round((sc1U+sc2U)/shfhU*100):null)],
-    ['Our PO Win %','\u226570%',fp(pct(opW1,opW1+opL1)),fp(pct(opW2,opW2+opL2)),fp(pct(opW1+opW2,opW1+opW2+opL1+opL2))],
-    ['Their PO Win %','\u226550%',fp(pct(tpW1,tpW1+tpL1)),fp(pct(tpW2,tpW2+tpL2)),fp(pct(tpW1+tpW2,tpW1+tpW2+tpL1+tpL2))],
-    ['Attack CB Win %','\u226550%',fp(pct(aCW1,aCW1+aCL1)),fp(pct(aCW2,aCW2+aCL2)),fp(pct(aCW1+aCW2,aCW1+aCW2+aCL1+aCL2))],
-    ['Mid CB Win %','\u226550%',fp(pct(mCW1,mCW1+mCL1)),fp(pct(mCW2,mCW2+mCL2)),fp(pct(mCW1+mCW2,mCW1+mCW2+mCL1+mCL2))],
-    ['Def CB Win %','\u226550%',fp(pct(dCW1,dCW1+dCL1)),fp(pct(dCW2,dCW2+dCL2)),fp(pct(dCW1+dCW2,dCW1+dCW2+dCL1+dCL2))],
-    ['Frees Won','\u2014',c1('Free Won'),c2('Free Won'),cfh('Free Won')],
-    ['Frees Lost','\u2014',c1('Free Lost'),c2('Free Lost'),cfh('Free Lost')],
-    ['Turnovers Won','\u2014',c1('Turnover Won'),c2('Turnover Won'),cfh('Turnover Won')],
-    ['Goal Chances','\u2014',c1('Goal Chance \u2013 Us'),c2('Goal Chance \u2013 Us'),cfh('Goal Chance \u2013 Us')]
+    rowPct('Contested Ball %', function(q){return cbW(q);}, function(q){return cbW(q)+cbL(q);}),
+    rowPct('Our Restarts We Win %', function(q){return opW(q);}, function(q){return opW(q)+opL(q);}),
+    rowPct('Their Restarts We Win %', function(q){return tpW(q);}, function(q){return tpW(q)+tpL(q);}),
+    rowPct('Total Contested + Restarts %', function(q){return cbW(q)+opW(q)+tpW(q);}, function(q){return cbW(q)+cbL(q)+opW(q)+opL(q)+tpW(q)+tpL(q);}),
+    rowPct('Our Shots %', function(q){return shU(q);}, function(q){return shU(q)+shT(q);}),
+    rowPct('Our Scores %', function(q){return scU(q);}, function(q){return scU(q)+scT(q);})
   ];
-  var html='<table id="ht-table"><thead><tr><th>KPI</th><th>Target</th><th>Q1</th><th>Q2</th><th>Total</th></tr></thead><tbody>';
-  for(var i=0;i<rows.length;i++){var r=rows[i];html+='<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td><td>'+esc(r[2])+'</td><td>'+esc(r[3])+'</td><td class="tot">'+esc(r[4])+'</td></tr>';}
+  var html='<table id="ht-table"><thead><tr><th>Metric</th><th>Q1</th><th>Q2</th><th>Total</th></tr></thead><tbody>';
+  for(var i=0;i<rows.length;i++){var r=rows[i];html+='<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td><td>'+esc(r[2])+'</td><td class="tot">'+esc(r[3])+'</td></tr>';}
   html+='</tbody></table>';
   document.getElementById('stats-content').innerHTML=html;
 }
