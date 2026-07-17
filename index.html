@@ -230,6 +230,16 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
 #ht-table td{padding:9px 6px;text-align:center;border-bottom:1px solid rgba(30,45,69,.5);font-weight:600;color:var(--text);}
 #ht-table td:first-child{text-align:left;color:var(--text-dim);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;}
 #ht-table td.tot{color:var(--accent);font-weight:900;font-size:15px;}
+/* Readings tab (ported from Sideline v3) */
+.rt{width:100%;border-collapse:collapse;font-size:13px;margin-top:2px;}
+.rt th{text-align:left;padding:8px 6px;font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#b0c0d8;border-bottom:1px solid var(--border);background:var(--surface2);}
+.rt th:first-child{border-top-left-radius:var(--r-sm);}
+.rt th:last-child{text-align:right;border-top-right-radius:var(--r-sm);}
+.rt td{padding:8px 6px;border-bottom:1px solid rgba(30,45,69,.5);font-weight:600;color:var(--text);}
+.rt td.tg{color:var(--text-dim);font-size:11px;white-space:nowrap;font-weight:700;}
+.rt td.vv{font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right;}
+.rt tr.sp td{padding:4px;border:0;}
+.rt tr.gh td{padding:12px 6px 4px;font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#7d90ab;border-bottom:1px solid var(--border);}
 
 #toast{position:fixed;bottom:82px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:6px 18px;font-size:12px;font-weight:600;color:var(--text-dim);opacity:0;transition:all .22s;white-space:nowrap;z-index:600;pointer-events:none;}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -372,7 +382,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
   <div class="stats-tabs">
     <div class="stab active" data-st="kpi" onclick="setStatTab(this)">KPIs</div>
     <div class="stab" data-st="raw" onclick="setStatTab(this)">Raw</div>
-    <div class="stab" data-st="ht"  onclick="setStatTab(this)">Half Time</div>
+    <div class="stab" data-st="ht"  onclick="setStatTab(this)">Readings</div>
   </div>
   <div class="stats-content" id="stats-content"></div>
 </div>
@@ -405,7 +415,7 @@ var subOpen=false,toastT=null,clockT=null;
 /* ── New KPI list per handover doc ── */
 var KPIS=[
   'Point \u2013 Play (Us)','Miss \u2013 Play (Us)','Point \u2013 Free (Us)','Miss \u2013 Free (Us)','Goal \u2013 Us','Goal Chance \u2013 Us',
-  'Point \u2013 Play (Them)','Miss \u2013 Play (Them)','Point \u2013 Free (Them)','Miss \u2013 Free (Them)','Goal \u2013 Them',
+  'Point \u2013 Play (Them)','Miss \u2013 Play (Them)','Point \u2013 Free (Them)','Miss \u2013 Free (Them)','Goal \u2013 Them','Goal Chance \u2013 Them',
   'Our PO \u2013 We Win \u2013 Short','Our PO \u2013 We Win \u2013 Long',
   'Our PO \u2013 We Lose \u2013 Short','Our PO \u2013 We Lose \u2013 Long',
   'Their PO \u2013 We Win \u2013 Short','Their PO \u2013 We Win \u2013 Long',
@@ -423,7 +433,7 @@ KPI_COL['Point \u2013 Play (Us)']='#00e676';KPI_COL['Miss \u2013 Play (Us)']='#f
 KPI_COL['Point \u2013 Free (Us)']='#00e676';KPI_COL['Miss \u2013 Free (Us)']='#ffe082';
 KPI_COL['Goal \u2013 Us']='#00e676';KPI_COL['Goal Chance \u2013 Us']='#00e676';
 KPI_COL['Point \u2013 Play (Them)']='#ff3d5a';KPI_COL['Miss \u2013 Play (Them)']='#ffab40';
-KPI_COL['Point \u2013 Free (Them)']='#ff3d5a';KPI_COL['Miss \u2013 Free (Them)']='#ffab40';KPI_COL['Goal \u2013 Them']='#ff3d5a';
+KPI_COL['Point \u2013 Free (Them)']='#ff3d5a';KPI_COL['Miss \u2013 Free (Them)']='#ffab40';KPI_COL['Goal \u2013 Them']='#ff3d5a';KPI_COL['Goal Chance \u2013 Them']='#ff3d5a';
 KPI_COL['Our PO \u2013 We Win \u2013 Short']='#b388ff';KPI_COL['Our PO \u2013 We Win \u2013 Long']='#b388ff';
 KPI_COL['Our PO \u2013 We Lose \u2013 Short']='#ff3d5a';KPI_COL['Our PO \u2013 We Lose \u2013 Long']='#ff3d5a';
 KPI_COL['Their PO \u2013 We Win \u2013 Short']='#b388ff';KPI_COL['Their PO \u2013 We Win \u2013 Long']='#b388ff';
@@ -462,7 +472,8 @@ var SUB_SCREENS={
       {label:'Point \u2013 Free',kpi:'Point \u2013 Free (Them)',cls:'red',zone:true},
       {label:'Goal',kpi:'Goal \u2013 Them',cls:'red',zone:true},
       {label:'Miss \u2013 Play',kpi:'Miss \u2013 Play (Them)',cls:'amber',zone:true},
-      {label:'Miss \u2013 Free',kpi:'Miss \u2013 Free (Them)',cls:'amber',zone:true}
+      {label:'Miss \u2013 Free',kpi:'Miss \u2013 Free (Them)',cls:'amber',zone:true},
+      {label:'Goal Chance',kpi:'Goal Chance \u2013 Them',cls:'amber',zone:true}
     ]
   },
   'our-po':{
@@ -507,10 +518,10 @@ var SUB_SCREENS={
     zone:true,
     btns:[
       {label:'Favorable',kpi:'Mid \u2013 Favorable',cls:'blue',zone:true},
+      {label:'Reset',kpi:'Mid \u2013 Reset',cls:'neutral',zone:true},
       {label:'Contest Win',kpi:'Mid \u2013 Contested Win',cls:'blue',zone:true},
       {label:'Contest Loss',kpi:'Mid \u2013 Contested Loss',cls:'grey',zone:true},
-      {label:'Unforced Loss',kpi:'Mid \u2013 Unforced Loss',cls:'amber',zone:true},
-      {label:'Reset',kpi:'Mid \u2013 Reset',cls:'neutral',span:2,zone:true}
+      {label:'Unforced Loss',kpi:'Mid \u2013 Unforced Loss',cls:'amber',zone:true}
     ]
   },
   'def-zone':{
@@ -519,6 +530,7 @@ var SUB_SCREENS={
     zone:true,
     btns:[
       {label:'Opp Favorable',kpi:'Def \u2013 Opp Favorable',cls:'grey',zone:true},
+      {blank:true},
       {label:'Contested Win',kpi:'Def \u2013 Contested Win',cls:'green',zone:true},
       {label:'Contested Loss',kpi:'Def \u2013 Contested Loss',cls:'grey',zone:true},
       {label:'Opp Unforced T/O',kpi:'Def \u2013 Opp Unforced Turnover',cls:'amber',zone:true}
@@ -550,7 +562,7 @@ var SUB_SCREENS={
 /* Category → KPIs for nav count badges */
 var NAV_KPIS={
   'we-shoot':['Point \u2013 Play (Us)','Miss \u2013 Play (Us)','Point \u2013 Free (Us)','Miss \u2013 Free (Us)','Goal \u2013 Us','Goal Chance \u2013 Us'],
-  'they-shoot':['Point \u2013 Play (Them)','Miss \u2013 Play (Them)','Point \u2013 Free (Them)','Miss \u2013 Free (Them)','Goal \u2013 Them'],
+  'they-shoot':['Point \u2013 Play (Them)','Miss \u2013 Play (Them)','Point \u2013 Free (Them)','Miss \u2013 Free (Them)','Goal \u2013 Them','Goal Chance \u2013 Them'],
   'our-po':['Our PO \u2013 We Win \u2013 Short','Our PO \u2013 We Win \u2013 Long','Our PO \u2013 We Lose \u2013 Short','Our PO \u2013 We Lose \u2013 Long'],
   'their-po':['Their PO \u2013 We Win \u2013 Short','Their PO \u2013 We Win \u2013 Long','Their PO \u2013 We Lose \u2013 Short','Their PO \u2013 We Lose \u2013 Long'],
   'attack':['Attack \u2013 Favorable Pass','Attack \u2013 Run Thru 45','Attack \u2013 Contested Win','Attack \u2013 Contested Loss','Attack \u2013 Unforced Turnover'],
@@ -648,6 +660,10 @@ function openSub(key){
   for(var i=0;i<cfg.btns.length;i++){
     var b=cfg.btns[i];
     var spanStyle=b.span?'grid-column:span '+b.span+';':'';
+    if(b.blank){
+      html+='<div class="sub-btn blank" style="'+spanStyle+'visibility:hidden;pointer-events:none;"></div>';
+      continue;
+    }
     var disabledCls=b.disabled?' disabled':'';
     var zoneCls=(b.zone&&!b.disabled)?' has-zone':'';
     var c=counts[b.kpi]||0;
@@ -671,7 +687,7 @@ function openSub(key){
   }
 
   /* Wire up buttons */
-  var btns=panel.querySelectorAll('.sub-btn:not(.disabled)');
+  var btns=panel.querySelectorAll('.sub-btn:not(.disabled):not(.blank)');
   for(var i=0;i<btns.length;i++){
     (function(btn){
       /* Zone segments fire with zone data */
@@ -972,7 +988,8 @@ function renderStats(){
 function renderKpiTab(c,qs){
   var gU=c('Goal \u2013 Us'),ppU=c('Point \u2013 Play (Us)'),pfU=c('Point \u2013 Free (Us)');
   var pmU=c('Miss \u2013 Play (Us)'),fmU=c('Miss \u2013 Free (Us)');
-  var shotsU=gU+ppU+pfU+pmU+fmU,scoresU=gU+ppU+pfU;
+  var gcU=c('Goal Chance \u2013 Us');
+  var shotsU=gU+ppU+pfU+pmU+fmU+gcU,scoresU=gU+ppU+pfU;
   var playU=ppU+pmU,freesU=pfU+fmU;
   var convU=shotsU?Math.round(scoresU/shotsU*100):null;
   var playAccU=playU?Math.round(ppU/playU*100):null;
@@ -980,7 +997,8 @@ function renderKpiTab(c,qs){
 
   var gT=c('Goal \u2013 Them'),ppT=c('Point \u2013 Play (Them)'),pfT=c('Point \u2013 Free (Them)');
   var pmT=c('Miss \u2013 Play (Them)'),fmT=c('Miss \u2013 Free (Them)');
-  var shotsT=gT+ppT+pfT+pmT+fmT,scoresT=gT+ppT+pfT;
+  var gcT=c('Goal Chance \u2013 Them');
+  var shotsT=gT+ppT+pfT+pmT+fmT+gcT,scoresT=gT+ppT+pfT;
   var playT=ppT+pmT,freesT=pfT+fmT;
   var convT=shotsT?Math.round(scoresT/shotsT*100):null;
   var playAccT=playT?Math.round(ppT/playT*100):null;
@@ -1078,7 +1096,7 @@ function renderRawTab(c){
     {lbl:'Shooting \u2014 Them',rows:[
       {cls:'rr',lbl:'Point Play (Them)',kpi:'Point \u2013 Play (Them)'},{cls:'ro',lbl:'Miss Play (Them)',kpi:'Miss \u2013 Play (Them)'},
       {cls:'rr',lbl:'Point Free (Them)',kpi:'Point \u2013 Free (Them)'},{cls:'ro',lbl:'Miss Free (Them)',kpi:'Miss \u2013 Free (Them)'},
-      {cls:'rr',lbl:'Goal (Them)',kpi:'Goal \u2013 Them'}
+      {cls:'rr',lbl:'Goal (Them)',kpi:'Goal \u2013 Them'},{cls:'ro',lbl:'Goal Chance (Them)',kpi:'Goal Chance \u2013 Them'}
     ]},
     {lbl:'Our Puck Outs',rows:[
       {cls:'rp',lbl:'Win Short',kpi:'Our PO \u2013 We Win \u2013 Short'},{cls:'rp',lbl:'Win Long',kpi:'Our PO \u2013 We Win \u2013 Long'},
@@ -1123,43 +1141,77 @@ function renderRawTab(c){
 }
 
 function renderHtTab(){
-  var fp=function(v){return v===null?'\u2014':v+'%';};
-  var pct=function(w,t){return t===0?null:Math.round(w/t*100);};
-
-  /* Open-play contested ball, all zones combined */
-  function cbW(q){return cntQ('Attack \u2013 Contested Win',[q])+cntQ('Mid \u2013 Contested Win',[q])+cntQ('Def \u2013 Contested Win',[q]);}
-  function cbL(q){return cntQ('Attack \u2013 Contested Loss',[q])+cntQ('Mid \u2013 Contested Loss',[q])+cntQ('Def \u2013 Contested Loss',[q]);}
-  /* Our restarts (puck-outs) */
-  function opW(q){return cntQ('Our PO \u2013 We Win \u2013 Short',[q])+cntQ('Our PO \u2013 We Win \u2013 Long',[q]);}
-  function opL(q){return cntQ('Our PO \u2013 We Lose \u2013 Short',[q])+cntQ('Our PO \u2013 We Lose \u2013 Long',[q]);}
-  /* Their restarts (our success) */
-  function tpW(q){return cntQ('Their PO \u2013 We Win \u2013 Short',[q])+cntQ('Their PO \u2013 We Win \u2013 Long',[q]);}
-  function tpL(q){return cntQ('Their PO \u2013 We Lose \u2013 Short',[q])+cntQ('Their PO \u2013 We Lose \u2013 Long',[q]);}
-  /* Shots = scores + misses (goal counts as a shot; missed goal chance not counted) */
-  function shU(q){return cntQ('Goal \u2013 Us',[q])+cntQ('Point \u2013 Play (Us)',[q])+cntQ('Point \u2013 Free (Us)',[q])+cntQ('Miss \u2013 Play (Us)',[q])+cntQ('Miss \u2013 Free (Us)',[q]);}
-  function shT(q){return cntQ('Goal \u2013 Them',[q])+cntQ('Point \u2013 Play (Them)',[q])+cntQ('Point \u2013 Free (Them)',[q])+cntQ('Miss \u2013 Play (Them)',[q])+cntQ('Miss \u2013 Free (Them)',[q]);}
-  /* Scores weighted to the scoreboard: goal = 3, point = 1 */
-  function scU(q){return 3*cntQ('Goal \u2013 Us',[q])+cntQ('Point \u2013 Play (Us)',[q])+cntQ('Point \u2013 Free (Us)',[q]);}
-  function scT(q){return 3*cntQ('Goal \u2013 Them',[q])+cntQ('Point \u2013 Play (Them)',[q])+cntQ('Point \u2013 Free (Them)',[q]);}
-
-  /* build a % row: label, then Q1 / Q2 / (Q1+Q2 total) of won ÷ total */
-  function rowPct(label, wf, tf){
-    var w1=wf(1),t1=tf(1),w2=wf(2),t2=tf(2);
-    return [label, fp(pct(w1,t1)), fp(pct(w2,t2)), fp(pct(w1+w2,t1+t2))];
-  }
-
+  var showH2=(state.gameFlow==='second_half'||state.gameFlow==='ended');
+  var H1=htReadings([1,2]),H2=htReadings([3,4]),F=htReadings([1,2,3,4]);
+  var cols=showH2?[['1st',H1],['2nd',H2],['Full',F]]:[['1st half',H1]];
+  var shoot=function(v){return v===null?'\u2014':(v>=70?'\u{1F525} ':v<55?'\u2744\uFE0F ':'')+v+'%';};
   var rows=[
-    rowPct('Contested Ball %', function(q){return cbW(q);}, function(q){return cbW(q)+cbL(q);}),
-    rowPct('Our Restarts We Win %', function(q){return opW(q);}, function(q){return opW(q)+opL(q);}),
-    rowPct('Their Restarts We Win %', function(q){return tpW(q);}, function(q){return tpW(q)+tpL(q);}),
-    rowPct('Total Contested + Restarts %', function(q){return cbW(q)+opW(q)+tpW(q);}, function(q){return cbW(q)+cbL(q)+opW(q)+opL(q)+tpW(q)+tpL(q);}),
-    rowPct('Our Shots %', function(q){return shU(q);}, function(q){return shU(q)+shT(q);}),
-    rowPct('Our Scores %', function(q){return scU(q);}, function(q){return scU(q)+scT(q);})
+    ['GRP','Win the ball',null],
+    ['Our long puck-out','55%+',function(r){return r.po===null?'\u2014':htLight(r.po>=55,r.po>=48)+' '+r.po+'% ('+r.olw+'W '+r.oll+'L)';}],
+    ['\u{1F3AF} Steal their long','50%+',function(r){return r.steal===null?'\u2014':htLight(r.steal>=50,r.steal>=45)+' '+r.steal+'% ('+r.tlw+'W '+r.tll+'L)';}],
+    ['Contested ball','50%+',function(r){return r.cb===null?'\u2014':htLight(r.cb>=50,r.cb>=45)+' '+r.cb+'% ('+r.cw+'W '+r.cl+'L)';}],
+    ['Attack contested','50%+',function(r){var z=r.zone.Attack;return htFmt(htPc(z[0],z[1]))+' ('+z[0]+'W '+z[1]+'L)';}],
+    ['Mid contested','50%+',function(r){var z=r.zone.Mid;return htFmt(htPc(z[0],z[1]))+' ('+z[0]+'W '+z[1]+'L)';}],
+    ['Def contested','50%+',function(r){var z=r.zone.Def;return htFmt(htPc(z[0],z[1]))+' ('+z[0]+'W '+z[1]+'L)';}],
+    ['Ball share','\u2014',function(r){return r.ball+'%';}],
+    ['GRP','Shots \u0026 scores',null],
+    ['Shot share (exp)','\u2014',function(r){return r.ss+'% ('+r.exp+'%)';}],
+    ['Cashing In (gap)','0+',function(r){return htLight(r.ci>=0,r.ci>=-3)+' '+(r.ci>0?'+':'')+r.ci;}],
+    ['Shots (us v them)','\u2014',function(r){return r.su+' v '+r.st;}],
+    ['Scores (us v them)','\u2014',function(r){return (r.gu+r.upts)+' v '+(r.gt+r.tpts);}],
+    ['Conversion (gap)','\u2014',function(r){return htFmt(r.conv)+' v '+htFmt(r.convt);}],
+    ['Shooting play (us v them)','\u2014',function(r){return shoot(r.play)+' v '+shoot(r.tplay);}],
+    ['GRP','Frees',null],
+    ['Frees (won \u2212 lost)','0+',function(r){var n=r.fw-r.fl;return htLight(n>=0,n>=-1)+' '+(n>0?'+':'')+n+' ('+r.fw+'W '+r.fl+'L)';}],
+    ['GRP','Goals',null],
+    ['Goals against','\u22641/half',function(r){return htLight(r.ga<=1,r.ga<=2)+' '+r.ga;}],
+    ['Our goal chances','\u2014',function(r){return ''+r.gc;}]
   ];
-  var html='<table id="ht-table"><thead><tr><th>Metric</th><th>Q1</th><th>Q2</th><th>Total</th></tr></thead><tbody>';
-  for(var i=0;i<rows.length;i++){var r=rows[i];html+='<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td><td>'+esc(r[2])+'</td><td class="tot">'+esc(r[3])+'</td></tr>';}
-  html+='</tbody></table>';
-  document.getElementById('stats-content').innerHTML=html;
+  var h='<table class="rt"><thead><tr><th>Reading</th><th>Target</th>';
+  cols.forEach(function(c){h+='<th>'+esc(c[0])+'</th>';});
+  h+='</tr></thead><tbody>';
+  rows.forEach(function(r){
+    if(r[0]==='SEP'){h+='<tr class="sp"><td colspan="'+(2+cols.length)+'"></td></tr>';return;}
+    if(r[0]==='GRP'){h+='<tr class="gh"><td colspan="'+(2+cols.length)+'">'+esc(r[1])+'</td></tr>';return;}
+    h+='<tr><td>'+esc(r[0])+'</td><td class="tg">'+esc(r[1])+'</td>';
+    cols.forEach(function(c){h+='<td class="vv">'+r[2](c[1])+'</td>';});
+    h+='</tr>';
+  });
+  h+='</tbody></table>';
+  document.getElementById('stats-content').innerHTML=h;
+}
+function htPc(w,l){return (w+l)?Math.round(100*w/(w+l)):null;}
+function htFmt(v){return v===null?'\u2014':v+'%';}
+function htLight(ok,near){return ok?'\u{1F7E2}':(near?'\u{1F7E1}':'\u{1F534}');}
+function htReadings(qs){
+  var c=function(k){return cntQ(k,qs);};
+  var olw=c('Our PO \u2013 We Win \u2013 Long'),oll=c('Our PO \u2013 We Lose \u2013 Long');
+  var ows=c('Our PO \u2013 We Win \u2013 Short'),ols=c('Our PO \u2013 We Lose \u2013 Short');
+  var tlw=c('Their PO \u2013 We Win \u2013 Long'),tll=c('Their PO \u2013 We Lose \u2013 Long');
+  var tws=c('Their PO \u2013 We Win \u2013 Short'),tls=c('Their PO \u2013 We Lose \u2013 Short');
+  var Z=['Attack','Mid','Def'];
+  var cw=0,cl=0,zone={};
+  Z.forEach(function(z){var w=c(z+' \u2013 Contested Win'),l=c(z+' \u2013 Contested Loss');cw+=w;cl+=l;zone[z]=[w,l];});
+  var fw=c('Free Won'),fl=c('Free Lost');
+  var bw=cw+olw+ows+tlw+tws,bl=cl+oll+ols+tll+tls;
+  var ball=(bw+bl)?100*bw/(bw+bl):52;
+  var su=c('Point \u2013 Play (Us)')+c('Miss \u2013 Play (Us)')+c('Point \u2013 Free (Us)')+c('Miss \u2013 Free (Us)')+c('Goal \u2013 Us')+c('Goal Chance \u2013 Us');
+  var st=c('Point \u2013 Play (Them)')+c('Miss \u2013 Play (Them)')+c('Point \u2013 Free (Them)')+c('Miss \u2013 Free (Them)')+c('Goal \u2013 Them')+c('Goal Chance \u2013 Them');
+  var ss=(su+st)?100*su/(su+st):50;
+  var exp=50+2*(ball-52);
+  var pp=c('Point \u2013 Play (Us)'),mp=c('Miss \u2013 Play (Us)');
+  var tpp=c('Point \u2013 Play (Them)'),tmp=c('Miss \u2013 Play (Them)');
+  var gu=c('Goal \u2013 Us'),gt=c('Goal \u2013 Them');
+  var upts=pp+c('Point \u2013 Free (Us)');
+  var tpts=tpp+c('Point \u2013 Free (Them)');
+  var conv=su?Math.round(100*(gu+upts)/su):null;
+  var convt=st?Math.round(100*(gt+tpts)/st):null;
+  return {olw:olw,oll:oll,po:htPc(olw,oll),cw:cw,cl:cl,cb:htPc(cw,cl),
+          tlw:tlw,tll:tll,steal:htPc(tlw,tll),fw:fw,fl:fl,ga:gt,
+          zone:zone,play:htPc(pp,mp),pps:pp+mp,tplay:htPc(tpp,tmp),tpps:tpp+tmp,
+          gu:gu,upts:upts,gt:gt,tpts:tpts,gc:c('Goal Chance \u2013 Us'),conv:conv,convt:convt,
+          ball:Math.round(ball),ss:Math.round(ss),exp:Math.round(exp),
+          ci:Math.round(ss-exp),su:su,st:st};
 }
 
 /* ── CSV Export ── */
