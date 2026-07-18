@@ -230,6 +230,17 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
 #ht-table td{padding:9px 6px;text-align:center;border-bottom:1px solid rgba(30,45,69,.5);font-weight:600;color:var(--text);}
 #ht-table td:first-child{text-align:left;color:var(--text-dim);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;}
 #ht-table td.tot{color:var(--accent);font-weight:900;font-size:15px;}
+.sn-grp{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#b0c0d8;padding:10px 2px 4px;}
+.sn-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:10px 13px;margin-bottom:5px;}
+.sn-line{display:flex;align-items:baseline;gap:7px;font-size:13px;font-weight:700;color:var(--text);line-height:1.5;padding:2px 0;}
+.sn-line+.sn-line{border-top:1px solid rgba(30,45,69,.5);padding-top:6px;margin-top:4px;}
+.sn-k{color:#9baabf;font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;flex:1;}
+.sn-v{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;}
+.sn-note{font-size:11px;font-weight:600;color:var(--text-dim);line-height:1.5;padding-top:4px;}
+.sn-score{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:12px;text-align:center;margin-bottom:5px;}
+.sn-sl{font-family:var(--font-display);font-size:38px;font-weight:900;line-height:1;color:var(--text);}
+.sn-sm{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);padding-top:5px;}
+.sn-up{color:#00e676;}.sn-dn{color:#ff3d5a;}
 /* Readings tab (ported from Sideline v3) */
 .rt{width:100%;border-collapse:collapse;font-size:13px;margin-top:2px;}
 .rt th{text-align:left;padding:8px 6px;font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#b0c0d8;border-bottom:1px solid var(--border);background:var(--surface2);}
@@ -380,7 +391,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
     <div class="qpill" data-q="4" onclick="setStatQ(this)">Q4</div>
   </div>
   <div class="stats-tabs">
-    <div class="stab active" data-st="kpi" onclick="setStatTab(this)">KPIs</div>
+    <div class="stab active" data-st="snap" onclick="setStatTab(this)">Snapshot</div>
     <div class="stab" data-st="raw" onclick="setStatTab(this)">Raw</div>
     <div class="stab" data-st="ht"  onclick="setStatTab(this)">Readings</div>
   </div>
@@ -576,7 +587,7 @@ var VALID_FLOWS=['pre','first_half','half_time','second_half','ended'];
 var eventLog=[],counts={};
 var meta={opposition:'',competition:'',venue:'',date:''};
 var state={gameFlow:'pre',fhStart:null,fhEnd:null,fhPausedMs:0,shStart:null,shEnd:null,shPausedMs:0,pausedAt:null};
-var statQ='match',statTab='kpi',pendingCfm=null;
+var statQ='match',statTab='snap',pendingCfm=null;
 var storageOk=true,storageType='local';
 
 /* ── Storage helpers ── */
@@ -959,8 +970,8 @@ function openStats(){
   document.getElementById('sh-meta').textContent=parts.join(' \u00B7 ')||'';
   statQ='match';
   document.querySelectorAll('#stat-qpills .qpill').forEach(function(p){p.classList.toggle('active',p.getAttribute('data-q')==='match');});
-  statTab='kpi';
-  document.querySelectorAll('.stab').forEach(function(t){t.classList.toggle('active',t.getAttribute('data-st')==='kpi');});
+  statTab='snap';
+  document.querySelectorAll('.stab').forEach(function(t){t.classList.toggle('active',t.getAttribute('data-st')==='snap');});
   renderStats();
   document.getElementById('screen-stats').classList.add('open');
 }
@@ -979,10 +990,77 @@ function cntQ(kpi,qs){var n=0;for(var i=0;i<eventLog.length;i++){var e=eventLog[
 function renderStats(){
   try{
     var qs=getQs(statQ),c=function(k){return cntQ(k,qs);};
-    if(statTab==='kpi')renderKpiTab(c,qs);
+    if(statTab==='snap')renderSnapTab(qs);
     else if(statTab==='raw')renderRawTab(c);
     else if(statTab==='ht')renderHtTab();
   }catch(e){document.getElementById('stats-content').innerHTML='<div style="padding:20px;color:var(--red);">Error rendering stats.</div>';}
+}
+
+function snLight(ok,near){return ok?'\u{1F7E2}':(near?'\u{1F7E1}':'\u{1F534}');}
+function znLight(v){return v===null?'':(v>55?'\u{1F7E2}':(v>=45?'\u{1F7E1}':'\u{1F534}'));}
+function snPct(v){return v===null?'\u2014':v+'%';}
+function lateFrees(qs){
+  var secs=function(t){var m=/(\d+):(\d+)\s*$/.exec(t||'');return m?(+m[1]*60+ +m[2]):null;};
+  var win=[],mx=null;
+  for(var i=0;i<eventLog.length;i++){
+    var e=eventLog[i];if(qs.indexOf(e.quarter)<0)continue;
+    var t=secs(e.time);if(t===null)continue;
+    win.push({k:e.kpi,t:t});if(mx===null||t>mx)mx=t;
+  }
+  if(mx===null)return null;
+  var cut=mx-600,fl=0,sc=0;
+  for(var j=0;j<win.length;j++){
+    if(win[j].t<cut)continue;
+    if(win[j].k==='Free Lost')fl++;
+    if(win[j].k==='Point \u2013 Free (Them)'||win[j].k==='Point \u2013 Play (Them)'||win[j].k==='Goal \u2013 Them')sc++;
+  }
+  return {fl:fl,sc:sc,mins:Math.min(10,Math.round(mx/60))};
+}
+function renderSnapTab(qs){
+  var r=htReadings(qs),c=function(k){return cntQ(k,qs);};
+  var L=function(k,v){return '<div class="sn-line"><span class="sn-k">'+k+'</span><span class="sn-v">'+v+'</span></div>';};
+  var uFr=r.ufp+r.umf,tFr=r.tfp+r.tmf;
+  var uSh=r.pps+uFr+r.gu,tSh=r.tpps+tFr+r.gt;
+  var uSc=r.gu+r.upts,tSc=r.gt+r.tpts;
+  var uCv=uSh?Math.round(100*uSc/uSh):null,tCv=tSh?Math.round(100*tSc/tSh):null;
+  var uFa=uFr?Math.round(100*r.ufp/uFr):null,tFa=tFr?Math.round(100*r.tfp/tFr):null;
+  var lf=lateFrees(qs);
+  var h='';
+
+  h+='<div class="sn-score"><div class="sn-sl">'+esc(r.sl)+'</div><div class="sn-sm '+(r.marg>0?'sn-up':(r.marg<0?'sn-dn':''))+'">'
+    +(r.marg>0?'+':'')+r.marg+' pts \u00B7 score share '+snPct(r.scs)+'</div></div>';
+
+  h+='<div class="sn-grp">Ball wins</div><div class="sn-card">';
+  h+=L('Puckouts \u2014 ours',(r.po===null?'\u2014':snLight(r.po>=55,r.po>=48)+' '+r.po+'%'));
+  h+=L('Puckouts \u2014 steal theirs',(r.steal===null?'\u2014':snLight(r.steal>=50,r.steal>=45)+' '+r.steal+'%'));
+  h+=L('Contested ball',(r.cb===null?'\u2014':znLight(r.cb)+' (Def '+znLight(htPc(r.zone.Def[0],r.zone.Def[1]))
+    +' Mid '+znLight(htPc(r.zone.Mid[0],r.zone.Mid[1]))+' Att '+znLight(htPc(r.zone.Attack[0],r.zone.Attack[1]))+')'));
+  h+=L('Overall ball win',snLight(r.ball>=52,r.ball>=48)+' '+r.ball+'%');
+  h+='<div class="sn-note">Indicator only \u2014 contested sample.</div></div>';
+
+  h+='<div class="sn-grp">Ball \u2192 shot</div><div class="sn-card">';
+  h+=L('Shot share',snLight(r.ci>=0,r.ci>=-3)+' '+r.ss+'%');
+  h+='<div class="sn-note">'+r.su+' shots off '+r.ball+'% of the ball: '+r.pps+' from play, '+uFr+' from frees, '+r.gc+' goal chance'+(r.gc===1?'':'s')+'.</div>';
+  h+='<div class="sn-note">They have '+r.st+' shots off '+(100-r.ball)+'%.</div></div>';
+
+  h+='<div class="sn-grp">Shots \u2192 scores</div><div class="sn-card">';
+  h+=L('Conversion \u2014 us',snLight(uCv>=60,uCv>=50)+' '+snPct(uCv)+' ('+uSc+'/'+uSh+')');
+  h+='<div class="sn-note">Play '+snPct(r.play)+' ('+r.pp+'/'+r.pps+') \u00B7 frees '+snPct(uFa)+' ('+r.ufp+'/'+uFr+')</div>';
+  h+=L('Conversion \u2014 them',snPct(tCv)+' ('+tSc+'/'+tSh+')');
+  h+='<div class="sn-note">Play '+snPct(r.tplay)+' ('+r.tpp+'/'+r.tpps+') \u00B7 frees '+snPct(tFa)+' ('+r.tfp+'/'+tFr+')</div></div>';
+
+  h+='<div class="sn-grp">Goals</div><div class="sn-card">';
+  h+=L('Conceded',snLight(r.gt<=1,r.gt<=2)+' '+r.gt);
+  h+=L('Goal chances',snLight(r.gct<=r.gc,r.gct<=r.gc+1)+' '+r.gc+' v '+r.gct);
+  h+='</div>';
+
+  h+='<div class="sn-grp">Discipline</div><div class="sn-card">';
+  h+=L('Scores from frees conceded',snLight(r.tfp<=1,r.tfp<=2)+' '+r.tfp+' from '+tFr+' ('+r.fl+' total)');
+  h+=L('Frees won \u2192 our points',r.ufp+' from '+uFr+' ('+r.fw+' total)');
+  if(lf)h+='<div class="sn-note">Last '+lf.mins+' min: '+lf.fl+' free'+(lf.fl===1?'':'s')+' conceded, '+lf.sc+' score'+(lf.sc===1?'':'s')+' against.</div>';
+  h+='</div>';
+
+  document.getElementById('stats-content').innerHTML=h;
 }
 
 function renderKpiTab(c,qs){
@@ -1158,14 +1236,17 @@ function renderHtTab(){
     ['Shot share (exp)','\u2014',function(r){return r.ss+'% ('+r.exp+'%)';}],
     ['Cashing In (gap)','0+',function(r){return htLight(r.ci>=0,r.ci>=-3)+' '+(r.ci>0?'+':'')+r.ci;}],
     ['Shots (us v them)','\u2014',function(r){return r.su+' v '+r.st;}],
-    ['Scores (us v them)','\u2014',function(r){return (r.gu+r.upts)+' v '+(r.gt+r.tpts);}],
+    ['Score','\u2014',function(r){return r.sl+' ('+(r.marg>0?'+':'')+r.marg+')';}],
+    ['Score share','\u2014',function(r){return r.scs===null?'\u2014':r.scs+'% ('+r.pfu+' v '+r.pft+' pts)';}],
     ['Conversion (gap)','\u2014',function(r){return htFmt(r.conv)+' v '+htFmt(r.convt);}],
-    ['Shooting play (us v them)','\u2014',function(r){return shoot(r.play)+' v '+shoot(r.tplay);}],
+    ['Shooting play (us v them)','\u2014',function(r){return shoot(r.play)+' '+r.pp+'/'+r.pps+' v '+shoot(r.tplay)+' '+r.tpp+'/'+r.tpps;}],
     ['GRP','Frees',null],
     ['Frees (won \u2212 lost)','0+',function(r){var n=r.fw-r.fl;return htLight(n>=0,n>=-1)+' '+(n>0?'+':'')+n+' ('+r.fw+'W '+r.fl+'L)';}],
+    ['Pts conceded from frees','\u2014',function(r){var t=r.tfp+r.tmf;return htLight(r.tfp<=1,r.tfp<=2)+' '+r.tfp+' from '+t+' ('+r.fl+' conceded)';}],
+    ['Pts scored from frees','\u2014',function(r){var t=r.ufp+r.umf;return r.ufp+' from '+t+' ('+r.fw+' won)';}],
     ['GRP','Goals',null],
     ['Goals against','\u22641/half',function(r){return htLight(r.ga<=1,r.ga<=2)+' '+r.ga;}],
-    ['Our goal chances','\u2014',function(r){return ''+r.gc;}]
+    ['Goal chances (us v them)','\u2014',function(r){return htLight(r.gct<=r.gc,r.gct<=r.gc+1)+' '+r.gc+' v '+r.gct;}]
   ];
   var h='<table class="rt"><thead><tr><th>Reading</th><th>Target</th>';
   cols.forEach(function(c){h+='<th>'+esc(c[0])+'</th>';});
@@ -1202,14 +1283,22 @@ function htReadings(qs){
   var pp=c('Point \u2013 Play (Us)'),mp=c('Miss \u2013 Play (Us)');
   var tpp=c('Point \u2013 Play (Them)'),tmp=c('Miss \u2013 Play (Them)');
   var gu=c('Goal \u2013 Us'),gt=c('Goal \u2013 Them');
-  var upts=pp+c('Point \u2013 Free (Us)');
-  var tpts=tpp+c('Point \u2013 Free (Them)');
+  var ufp=c('Point \u2013 Free (Us)'),umf=c('Miss \u2013 Free (Us)');
+  var tfp=c('Point \u2013 Free (Them)'),tmf=c('Miss \u2013 Free (Them)');
+  var upts=pp+ufp;
+  var tpts=tpp+tfp;
   var conv=su?Math.round(100*(gu+upts)/su):null;
   var convt=st?Math.round(100*(gt+tpts)/st):null;
+  var pad=function(n){return (n<10?'0':'')+n;};
+  var sl=gu+'-'+pad(upts)+' v '+gt+'-'+pad(tpts);
+  var pfu=gu*3+upts,pft=gt*3+tpts;
+  var marg=pfu-pft;
+  var scs=(pfu+pft)?Math.round(100*pfu/(pfu+pft)):null;
   return {olw:olw,oll:oll,po:htPc(olw,oll),cw:cw,cl:cl,cb:htPc(cw,cl),
           tlw:tlw,tll:tll,steal:htPc(tlw,tll),fw:fw,fl:fl,ga:gt,
-          zone:zone,play:htPc(pp,mp),pps:pp+mp,tplay:htPc(tpp,tmp),tpps:tpp+tmp,
-          gu:gu,upts:upts,gt:gt,tpts:tpts,gc:c('Goal Chance \u2013 Us'),conv:conv,convt:convt,
+          zone:zone,play:htPc(pp,mp),pp:pp,pps:pp+mp,tplay:htPc(tpp,tmp),tpp:tpp,tpps:tpp+tmp,
+          ufp:ufp,umf:umf,tfp:tfp,tmf:tmf,sl:sl,marg:marg,scs:scs,pfu:pfu,pft:pft,
+          gu:gu,upts:upts,gt:gt,tpts:tpts,gc:c('Goal Chance \u2013 Us'),gct:c('Goal Chance \u2013 Them'),conv:conv,convt:convt,
           ball:Math.round(ball),ss:Math.round(ss),exp:Math.round(exp),
           ci:Math.round(ss-exp),su:su,st:st};
 }
