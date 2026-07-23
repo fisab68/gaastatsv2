@@ -1,8 +1,10 @@
 /* GAA Stats — Service Worker
    Cache-first strategy. Single file app — only the HTML needs caching.
-   Bump CACHE_VERSION when deploying a new version of gaa_app-19.html */
+   Bump CACHE_VERSION when deploying a new version of gaa_app-19.html
 
-var CACHE_VERSION = 'gaa-v19-5';
+   ⚠️ If you deploy the app under a NEW filename, update FILES_TO_CACHE too.
+      Bumping the version alone will just re-cache the old file. */
+var CACHE_VERSION = 'gaa-v19-6';
 var FILES_TO_CACHE = [
   '/gaastats1999/gaa_app-19.html',
   '/gaastats1999/'   /* also cache the root path in case that's the entry point */
@@ -12,9 +14,16 @@ var FILES_TO_CACHE = [
 self.addEventListener('install', function(e) {
   e.waitUntil(
     caches.open(CACHE_VERSION).then(function(cache) {
-      return cache.addAll(FILES_TO_CACHE);
+      /* {cache:'reload'} bypasses the browser's own HTTP cache.
+         Without it, a host max-age header can serve a stale copy of the
+         HTML into the new cache — the version looks bumped but the app
+         on the sideline is unchanged. */
+      return cache.addAll(FILES_TO_CACHE.map(function(u) {
+        return new Request(u, {cache: 'reload'});
+      }));
     }).then(function() {
-      /* Force this SW to become active immediately without waiting */
+      /* Force this SW to become active immediately without waiting.
+         This does NOT reload open pages — a running match is unaffected. */
       return self.skipWaiting();
     })
   );
@@ -53,12 +62,15 @@ self.addEventListener('fetch', function(e) {
         /* Serve from cache, then refresh cache in background */
         var networkFetch = fetch(e.request).then(function(response) {
           if (response && response.status === 200) {
-            caches.open(CACHE_VERSION).then(function(cache) {
-              cache.put(e.request, response.clone());
+            return caches.open(CACHE_VERSION).then(function(cache) {
+              return cache.put(e.request, response.clone());
             });
           }
-          return response;
         }).catch(function() { /* offline — no update needed */ });
+
+        /* Hold the worker open until the background refresh finishes,
+           otherwise the browser may kill it before cache.put completes. */
+        e.waitUntil(networkFetch);
 
         return cached;
       }
